@@ -4,9 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/SphereComponent.h"
+
 #include "Bullet.generated.h"
 
 class UParticleSystemComponent;
+//class USphereComponent;
 
 UCLASS()
 class TOONTANKS_API ABullet : public AActor
@@ -17,14 +20,20 @@ public:
 	// Sets default values for this actor's properties
 	ABullet();
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mesh")
-	float Speed = 100.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	float ImpulsePower = 1000.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mesh")
 	UStaticMeshComponent* BulletMesh;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mesh")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Particule")
 	UParticleSystemComponent* ProjectileParticle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Particule")
+	UParticleSystemComponent* ExplosionParticle;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = "Collider")
+	USphereComponent* CollisionComponent;
 
 	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh")
 
@@ -33,6 +42,9 @@ protected:
 	virtual void BeginPlay() override;
 
 	AActor* OwnerActor;
+	UWorld* World;
+	int BulletDamage = 10;
+
 
 public:	
 	// Called every frame
@@ -42,6 +54,9 @@ public:
 	void SetOwnerActor(AActor* Actor) { OwnerActor = Actor; }
 
 	UFUNCTION(BlueprintCallable, Category = "Setup")
-	void OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	void SetBulletDamage(int Damage) { BulletDamage = Damage; }
+
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
 };

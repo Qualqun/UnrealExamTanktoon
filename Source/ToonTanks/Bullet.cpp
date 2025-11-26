@@ -78,3 +78,9 @@ void ABullet::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrim
 	}
 }
 
+void ABullet::SetupBulletParams(AActor* Actor, int Damage, float Impulse)
+{
+	OwnerActor = Actor;
+	BulletDamage = Damage;
+	ImpulsePower = Impulse;
+}

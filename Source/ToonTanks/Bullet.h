@@ -20,9 +20,6 @@ public:
 	// Sets default values for this actor's properties
 	ABullet();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-	float ImpulsePower = 1000.f;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mesh")
 	UStaticMeshComponent* BulletMesh;
 
@@ -44,6 +41,8 @@ protected:
 	AActor* OwnerActor;
 	UWorld* World;
 	int BulletDamage = 10;
+	float ImpulsePower = 1000.f;
+
 
 
 public:	
@@ -55,6 +54,12 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void SetBulletDamage(int Damage) { BulletDamage = Damage; }
+
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void SetBulletImpulsion(float Impulse) { ImpulsePower = Impulse; }
+
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void SetupBulletParams(AActor* Actor, int Damage, float Impulse);
 
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);

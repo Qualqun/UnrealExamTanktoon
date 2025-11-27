@@ -63,19 +63,23 @@ void ABullet::Tick(float DeltaTime)
 
 void ABullet::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
-	CollisionComponent->DestroyComponent();
-	BulletMesh->DestroyComponent();
-
-	ProjectileParticle->Deactivate();
-	ExplosionParticle->ActivateSystem();
-
-	if (OtherActor && OtherActor != this && OtherActor != OwnerActor)
+	if (OtherActor != OwnerActor)
 	{
-		if (OtherActor->Implements<UIDamageable>())
+		CollisionComponent->DestroyComponent();
+		BulletMesh->DestroyComponent();
+
+		ProjectileParticle->Deactivate();
+		ExplosionParticle->ActivateSystem();
+
+		if (OtherActor && OtherActor != this)
 		{
-			IIDamageable::Execute_TakeDamage(OtherActor, BulletDamage);
+			if (OtherActor->Implements<UIDamageable>())
+			{
+				IIDamageable::Execute_TakeDamage(OtherActor, BulletDamage);
+			}
 		}
 	}
+	
 }
 
 void ABullet::SetupBulletParams(AActor* Actor, int Damage, float Impulse)

@@ -35,8 +35,6 @@ ABullet::ABullet()
 
 	ExplosionParticle = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ExplosionParticle"));
 	ExplosionParticle->SetupAttachment(RootComponent);
-
-	World = GetWorld();
 }
 
 // Called when the game starts or when spawned
@@ -44,9 +42,11 @@ void ABullet::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CollisionComponent->AddImpulse(GetActorForwardVector() * ImpulsePower, NAME_None, true);
-	ExplosionParticle->DeactivateImmediate();
-
+	if (CollisionComponent && ExplosionParticle)
+	{
+		CollisionComponent->AddImpulse(GetActorForwardVector() * ImpulsePower, NAME_None, true);
+		ExplosionParticle->DeactivateImmediate();
+	}
 }
 
 // Called every frame
@@ -54,7 +54,7 @@ void ABullet::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (ProjectileParticle->HasCompleted() && ExplosionParticle->HasCompleted())
+	if (ProjectileParticle && ExplosionParticle && ProjectileParticle->HasCompleted() && ExplosionParticle->HasCompleted())
 	{
 		Destroy();
 		UE_LOG(LogTemp, Warning, TEXT("Destroy"));

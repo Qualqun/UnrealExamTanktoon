@@ -38,12 +38,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+private :
 	AActor* OwnerActor;
-	UWorld* World;
 	int BulletDamage = 10;
 	float ImpulsePower = 1000.f;
-
-
 
 public:	
 	// Called every frame
